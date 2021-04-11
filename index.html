@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>The Count Down</title>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+    integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+  <link rel="stylesheet" herf="./style.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+      font-size: 1rem;
+      font-weight: 400;
+      line-height: 1.5;
+      color: #cecece;
+      text-align: left;
+      background-color: #272727;
+    }
+
+    .bg-light {
+      background-color: #525252 !important;
+      color: #cecece;
+    }
+
+    .rounded {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    #overlay {
+      position: fixed;
+      /* Sit on top of the page content */
+      display: none;
+      /* Hidden by default */
+      width: 100%;
+      /* Full width (cover the whole page) */
+      height: 100%;
+      /* Full height (cover the whole page) */
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      /* Black background with opacity */
+      z-index: 2;
+      /* Specify a stack order in case you're using a different order for other elements */
+      cursor: pointer;
+      /* Add a pointer on hover */
+    }
+  </style>
+  <script src="renderer.js"></script>
+</head>
+
+<body onload="Setup()">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="neos:?world=neos-session:///S-U-Creator-Jam:Hub">NeosX</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">friends</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Messages</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Invontory</a>
+        </li>
+      </ul>
+      <form id="logout" class="form-inline my-2 my-lg-0">
+        <input class="btn btn-outline-danger" type="button" id="logoutbtn" value="${USERID} Logout" onclick="Logout()">
+      </form>
+    </div>
+  </nav>
+  <form id="login" class="form-inline my-2 my-lg-0">
+    <input type="text" id="Email" class="fadeIn second" name="login" placeholder="login">
+    <input type="password" id="Password" class="fadeIn third" name="login" placeholder="password">
+    <input type="button" value="Login" onclick="Login()">
+  </form>
+  <a id="demo"></a>
+
+  </div>
+  </div>
+  <div id="friendspanel" style="width: 35%; float: left;overflow-y: scroll;position: inherit;height: 911px;">
+    <ul id="friends">
+    </ul>
+  </div>
+  <div id="Messages" style="float: right;padding: 14px;overflow-y: scroll;position: inherit;height: 911px;">
+
+  </div>
+</body>
+
+</html>
