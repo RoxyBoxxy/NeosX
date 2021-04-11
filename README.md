@@ -1,5 +1,7 @@
 # NeosX
 
+[![Build Status](https://travis-ci.org/RoxyBoxxy/NeosX.svg?branch=main)](https://travis-ci.org/RoxyBoxxy/NeosX)
+
 A simple app i am making to see who is on and where in neos without loading up the game
 
 ## To Use
