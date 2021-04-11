@@ -56,6 +56,29 @@
       cursor: pointer;
       /* Add a pointer on hover */
     }
+    .notification {
+  background-color: #555;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification:hover {
+  background: red;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+}
   </style>
   <script src="renderer.js"></script>
 </head>
@@ -71,7 +94,10 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">friends</a>
+          <a href="#" class="notification">
+            <span class="nav-link">Inbox</span>
+            <span class="badge">3</span>
+          </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Messages</a>
@@ -83,6 +109,7 @@
       <form id="logout" class="form-inline my-2 my-lg-0">
         <input class="btn btn-outline-danger" type="button" id="logoutbtn" value="${USERID} Logout" onclick="Logout()">
       </form>
+
     </div>
   </nav>
   <form id="login" class="form-inline my-2 my-lg-0">
