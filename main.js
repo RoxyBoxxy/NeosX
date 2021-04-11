@@ -3,7 +3,6 @@ const ipc = ipcMain
 // Modules to control application life and create native browser window
 
 const path = require('path')
-const countdown = require('./countdown')
 
 
   // Open the DevTools.
