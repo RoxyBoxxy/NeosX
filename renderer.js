@@ -21,10 +21,11 @@ function Setup() {
                 },
                 cache: "no-cache"
             }).then(response => response.json())
+
             .then(data => {
                 console.log(data);
                 document.getElementById('logoutbtn').value = data.username + " Logout"
-                GetFriends()
+                AuthCheck()
             })
 
     }
@@ -32,9 +33,30 @@ function Setup() {
 
 }
 
+function AuthCheck(){
+    return fetch(HOST + "/api/users/" + localStorage.getItem("userId") + "/friends", {
+        method: "GET",
+        headers: {
+            Authorization: "neos " + localStorage.getItem("userId") + ":" + localStorage.getItem("token")
+        },
+        cache: "no-cache"
+    }).then(function (response) {
+        console.log(response.status); // returns 200
+        if (response.status == 413) {
+            alert("You have been logged out, Login Again")
+            document.getElementById("login").style.visibility = "visible"
+            document.getElementById("logout").style.visibility = "hidden"
+            localStorage.clear();
+            clearInterval(myVar);
+        }
+        else GetFriends()
+    });
+}
+
 function Login() {
     var EMAIL = document.getElementById("Email").value
     var PASSWORD = document.getElementById("Password").value
+    var MachineID = document.getElementById("MachineID").value
     const e = JSON.stringify({
         "ownerId": null,
         "username": null,
@@ -42,7 +64,7 @@ function Login() {
         "password": PASSWORD,
         "recoverCode": null,
         "sessionToken": null,
-        "secretMachineId": null,
+        "secretMachineId": MachineID,
         "rememberMe": true
     });
     return fetch(HOST + "/api/userSessions", {
@@ -74,10 +96,12 @@ function Logout() {
     }).then(function (response) {
         console.log(response.status); // returns 200
         if (response.status == 200) {
+            alert("Logged Out")
             document.getElementById("login").style.visibility = "visible"
             document.getElementById("logout").style.visibility = "hidden"
             localStorage.clear();
             clearInterval(myVar);
+            $(friends).empty();
         }
     });
 }
@@ -188,7 +212,7 @@ function GetJoinURL(e){
     if (!e) {
         return '<button id="button1" onclick="window.open(document.URL, "_blank", "location=yes,height=570,width=520,scrollbars=yes,status=yes");" type="button" class="btn btn-danger" disabled>Join</button>'
     }
-    else return `<button id="button1" onclick="window.location.href=neos:?world=neos-session:///${e.sessionId}' type="button" class="btn btn-success">Join</button>`;
+    else return `<button id="button1" onclick="window.location.href='neos:?world=neos-session:///${e.sessionId}'" type="button" class="btn btn-success">Join</button>`;
 } 
 function GetInbox(e) {
 
