@@ -10,10 +10,10 @@ var test = [""];
 function Setup() {
     if (!localStorage.getItem("token")) {
         document.getElementById("login").style.visibility = "visible"
-        document.getElementById("logout").style.visibility = "hidden"
+        document.getElementById("main").style.visibility = "hidden"
     } else {
         document.getElementById("login").style.visibility = "hidden"
-        document.getElementById("logout").style.visibility = "visible"
+        document.getElementById("main").style.visibility = "visible"
         return fetch(HOST + "/api/users/" + localStorage.getItem("userId"), {
                 method: "GET",
                 headers: {
@@ -81,7 +81,7 @@ function Login() {
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.userId);
             document.getElementById("login").style.visibility = "hidden"
-            document.getElementById("logout").style.visibility = "visible"
+            document.getElementById("main").style.visibility = "visible"
             GetFriends()
         })
 }
@@ -98,7 +98,7 @@ function Logout() {
         if (response.status == 200) {
             alert("Logged Out")
             document.getElementById("login").style.visibility = "visible"
-            document.getElementById("logout").style.visibility = "hidden"
+            document.getElementById("main").style.visibility = "hidden"
             localStorage.clear();
             clearInterval(myVar);
             $(friends).empty();
@@ -117,7 +117,7 @@ function GetFriends() {
         .then(data => {
             console.log(data.length)
             console.log(data);
-            document.getElementById("demo").innerHTML = test;
+            $.notify("Got Friends", "success");
             $('#friends').empty();
             for (var i = 0; i < data.length; i++) {
                 if (!data[i].userStatus) {
@@ -128,19 +128,21 @@ function GetFriends() {
                         let col = "blue"
                         switch (data[i].userStatus.onlineStatus) {
                             case "Online":
-                                col = "#42f56f"
+                                col = "online"
                                 break;
                             case "Away":
-                                col = "#ffbb00"
+                                col = "away"
                                 break;
                             case "Busy":
-                                col = "#ff0000"
+                                col = "offline"
                                 break;
                             default:
                                 break;
                         }
-                        if (data[i].profile)jQuery(friends).append('<div class="rounded" style="padding-top: 10px;"><img onclick="GetInbox(\'' + data[i].id + '\')" style="height: 5pc;border-radius: 90px; box-shadow: 0px 0px 16px 1px ' + col + ';" src="' + GetAsset(data[i].profile.iconUrl) + '"><div id="userinfo"><span class="name">' + data[i].friendUsername + '\n </span><span class="session">' + GetWorldStatus(data[i].userStatus.activeSessions[0])  + ''+ GetJoinURL(data[i].userStatus.activeSessions[0]) +'</span></div></div>');
-                            else jQuery(friends).append('<div class="rounded" style="padding-top: 10px;"><img onclick="GetInbox(\'' + data[i].id + '\')" style="height: 5pc;border-radius: 90px; box-shadow: 0px 0px 16px 1px ' + col + ';" src="https://lh3.googleusercontent.com/proxy/ZnJtZRW8Bi4-IFfJPdVA_52bVoL-L_o_qQSriBaWoAj4iYGfyPENUghzm87CucCVPpXpqzgQPtOSVqr-SOixtQjq7ngzGR5bCXnueiiAnMMyYvZl4kG3">User: ' + data[i].friendUsername + '\n ' + GetWorldStatus(data[i].userStatus.activeSessions[0]) + '</div>');
+                        console.log(data[i])
+                        if (data[i].profile)jQuery(friends).append(
+                            '<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data[i].profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon '+ col +'"></span></div><div class="user_info"><span onclick="GetUser(\'' + data[i].id + '\')"">' + data[i].friendUsername + '</span><p>'+ GetWorldStatus(data[i].userStatus.activeSessions[0]) +'</p>'+ GetJoinURL(data[i].userStatus.activeSessions[0]) +'</div></div></li>');
+                            else jQuery(friends).append('<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="https://cdn.discordapp.com/attachments/495033101798473749/831273842751438859/vr-6037930_960_720.png" class="rounded-circle user_img"><span class="online_icon '+ col +'"></span></div><div class="user_info"><span>' + data[i].friendUsername + '</span><p>'+ GetWorldStatus(data[i].userStatus.activeSessions[0]) +'</p>'+ GetJoinURL(data[i].userStatus.activeSessions[0]) +'</div></div></li>');
                     }
                   }
                 onlineStatus = "Offline"
@@ -210,9 +212,9 @@ function GetWorldStatus(e) {
 }
 function GetJoinURL(e){
     if (!e) {
-        return '<button id="button1" onclick="window.open(document.URL, "_blank", "location=yes,height=570,width=520,scrollbars=yes,status=yes");" type="button" class="btn btn-danger" disabled>Join</button>'
-    }
-    else return `<button id="button1" onclick="window.location.href='neos:?world=neos-session:///${e.sessionId}'" type="button" class="btn btn-success">Join</button>`;
+        return '<button id="button1" type="button" class="btn btn-outline-danger" onclick="alert("This is not a joinable session")">Join</button>'
+    }   
+    else return `<button type="button" class="btn btn-outline-success" onclick="window.location.href='neos:?world=neos-session:///${e.sessionId}'">Join</button>`;
 } 
 function GetInbox(e) {
 
@@ -221,22 +223,48 @@ function GetInbox(e) {
             headers: {
                 Authorization: "neos " + localStorage.getItem("userId") + ":" + localStorage.getItem("token")
             },
-            cache: "no-cache"
-        }).then(response => response.json())
+            cache: "reload"
+            
+        })
+        .then(response => response.json())
         .then(data => {
-            document.getElementById("Messages").innerHTML = "";
+            document.getElementById("inbox").innerHTML = "";
             console.log(data);
+
             for (var i = 0; i < data.length; i++) {
 
                 switch (data[i].messageType) {
                     case "Sound":
                         let content = JSON.parse(data[i].content)
-                        jQuery(Messages).append('<div class="rounded">User: ' + data[i].senderId + ', <audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"></audio></div>');
-                        break;
+                        if (data[i].recipientId === localStorage.getItem("userId")){
+                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span class="msg_time">' + data[i].senderId + '</span></div></div>');
+                            break   
+                        }
+                        else
+                        jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span class="msg_time">You</span></div></div>');
+                        break   
                     case "SessionInvite":
                         break
+                    case "Object":
+                        break
+                    case "CreditTransfer":
+                        NCR = JSON.parse(data[i].content)
+                        console.log(NCR)
+                        if (data[i].recipientId === localStorage.getItem("userId")){
+                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">Recived ' + NCR.amount + NCR.token +'<span class="msg_time">' + data[i].senderId + '</span></div></div>');
+                            break   
+                        }
+                        else
+                        jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">Sent ' + NCR.amount + NCR.token +'<span class="msg_time">You</span></div></div>');
+                        break
                     default:
-                        jQuery(Messages).append('<div class="rounded">User: ' + data[i].senderId + ', Message: ' + data[i].content + '</div>');
+                        if (data[i].recipientId == localStorage.getItem("userId")){
+                            
+                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + data[i].content + '<span class="msg_time">' + data[i].senderId + '</span></div></div>');
+                            break
+                        }
+                        else
+                        jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">' + data[i].content + '<span class="msg_time">You</span></div></div>');
                         break;
                 }
             }
@@ -247,3 +275,25 @@ function GetInbox(e) {
 new Titlebar({
 	backgroundColor: Color.fromHex('#ECECEC')
 });
+
+function GetUser(e) {
+    return fetch(HOST + "/api/users/" + e, {
+            method: "GET",
+            cache: "no-cache"
+        }).then(response => response.json())
+        .then(data => {
+            console.log(data.length)
+            console.log(data);
+            document.getElementById("userinfo").innerHTML = "";
+            document.getElementById("inbox").innerHTML = "";
+            $.notify("Getting Messages", "success");
+            jQuery(userinfo).append(
+                '<div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data.profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon"></span></div><div class="user_info"><span>'+ data.username +'</span><p>1767 Messages</p></div><div class="video_cam"><span><i class="fas fa-video"></i></span><span><i class="fas fa-phone"></i></span></div></div>');
+                onlineStatus = "Offline"
+                //console.log(data[i].userStatus.onlineStatu
+                GetInbox(e)
+
+            }
+        )
+}
+

@@ -19,7 +19,7 @@ app.whenReady().then(() => {
   });
   
     // and load the index.html of the app.
-    mainWindow.loadFile('index.html')
+    mainWindow.loadFile('new.html')
   
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the

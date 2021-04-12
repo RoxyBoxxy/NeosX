@@ -56,6 +56,70 @@
       cursor: pointer;
       /* Add a pointer on hover */
     }
+<<<<<<< Updated upstream
+=======
+    .notification {
+  background-color: #555;
+  color: white;
+  text-decoration: none;
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+  border-radius: 2px;
+}
+
+.notification:hover {
+  background: red;
+}
+
+.notification .badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background: red;
+  color: white;
+}
+.rounded{
+  width: 320px;
+  padding: 10px;
+  border: 5px solid gray;
+  margin: 0;
+}
+.container {
+  border: 2px solid #dedede;
+  background-color: #464646;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+  max-width: 665px;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #2f2f2f;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+>>>>>>> Stashed changes
   </style>
   <script src="renderer.js"></script>
 </head>
@@ -70,8 +134,13 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
+<<<<<<< Updated upstream
         <li class="nav-item active">
           <a class="nav-link" href="#">friends</a>
+=======
+        <li class="nav-item">
+          <a class="nav-link" href="#">Friends</a>
+>>>>>>> Stashed changes
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Messages</a>
@@ -100,7 +169,7 @@
     <ul id="friends">
     </ul>
   </div>
-  <div id="Messages" style="float: right;padding: 14px;overflow-y: scroll;position: inherit;height: 911px;">
+  <div id="Messages" style="float: right;padding: 14px;overflow-y: scroll;position: inherit;height: 911px; max-width: 65%;">
 
   </div>
 </body>
