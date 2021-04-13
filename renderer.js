@@ -1,5 +1,3 @@
-
-
 HOST = "https://www.neosvr-api.com"
 const USERID = localStorage.getItem("userId")
 TOKEN = localStorage.getItem("token")
@@ -33,7 +31,7 @@ function Setup() {
 
 }
 
-function AuthCheck(){
+function AuthCheck() {
     return fetch(HOST + "/api/users/" + localStorage.getItem("userId") + "/friends", {
         method: "GET",
         headers: {
@@ -48,8 +46,7 @@ function AuthCheck(){
             document.getElementById("logout").style.visibility = "hidden"
             localStorage.clear();
             clearInterval(myVar);
-        }
-        else GetFriends()
+        } else GetFriends()
     });
 }
 
@@ -122,8 +119,7 @@ function GetFriends() {
             for (var i = 0; i < data.length; i++) {
                 if (!data[i].userStatus) {
                     console.log("skipped")
-                  }
-                  else {
+                } else {
                     if (data[i].userStatus.onlineStatus != 'Offline') {
                         let col = "blue"
                         switch (data[i].userStatus.onlineStatus) {
@@ -140,11 +136,11 @@ function GetFriends() {
                                 break;
                         }
                         console.log(data[i])
-                        if (data[i].profile)jQuery(friends).append(
-                            '<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data[i].profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon '+ col +'"></span></div><div class="user_info"><span onclick="GetUser(\'' + data[i].id + '\')"">' + data[i].friendUsername + '</span><p>'+ GetWorldStatus(data[i].userStatus.activeSessions[0]) +'</p>'+ GetJoinURL(data[i].userStatus.activeSessions[0]) +'</div></div></li>');
-                            else jQuery(friends).append('<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="https://cdn.discordapp.com/attachments/495033101798473749/831273842751438859/vr-6037930_960_720.png" class="rounded-circle user_img"><span class="online_icon '+ col +'"></span></div><div class="user_info"><span>' + data[i].friendUsername + '</span><p>'+ GetWorldStatus(data[i].userStatus.activeSessions[0]) +'</p>'+ GetJoinURL(data[i].userStatus.activeSessions[0]) +'</div></div></li>');
+                        if (data[i].profile) jQuery(friends).append(
+                            '<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data[i].profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon ' + col + '"></span></div><div class="user_info"><span onclick="GetUser(\'' + data[i].id + '\')"">' + data[i].friendUsername + '</span><p>' + GetWorldStatus(data[i].userStatus.activeSessions[0]) + '</p>' + GetJoinURL(data[i].userStatus.activeSessions[0]) + '</div></div></li>');
+                        else jQuery(friends).append('<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="https://cdn.discordapp.com/attachments/495033101798473749/831273842751438859/vr-6037930_960_720.png" class="rounded-circle user_img"><span class="online_icon ' + col + '"></span></div><div class="user_info"><span>' + data[i].friendUsername + '</span><p>' + GetWorldStatus(data[i].userStatus.activeSessions[0]) + '</p>' + GetJoinURL(data[i].userStatus.activeSessions[0]) + '</div></div></li>');
                     }
-                  }
+                }
                 onlineStatus = "Offline"
                 //console.log(data[i].userStatus.onlineStatus)
 
@@ -172,7 +168,7 @@ function myTimer() {
 }
 
 function GetAsset(e) {
-    if (!e){
+    if (!e) {
         return "https://lh3.googleusercontent.com/proxy/ZnJtZRW8Bi4-IFfJPdVA_52bVoL-L_o_qQSriBaWoAj4iYGfyPENUghzm87CucCVPpXpqzgQPtOSVqr-SOixtQjq7ngzGR5bCXnueiiAnMMyYvZl4kG3"
     }
     return "" === e ? "" : "https://cloudxstorage.blob.core.windows.net/assets" + ("" === e ? "" : e.split("//")[1].split(".")[0])
@@ -207,15 +203,15 @@ window.onclick = function (event) {
 function GetWorldStatus(e) {
     if (!e) {
         return "Privete or Hidden World"
-    }
-    else return e.name
+    } else return e.name
 }
-function GetJoinURL(e){
+
+function GetJoinURL(e) {
     if (!e) {
         return '<button id="button1" type="button" class="btn btn-outline-danger" onclick="alert("This is not a joinable session")">Join</button>'
-    }   
-    else return `<button type="button" class="btn btn-outline-success" onclick="window.location.href='neos:?world=neos-session:///${e.sessionId}'">Join</button>`;
-} 
+    } else return `<button type="button" class="btn btn-outline-success" onclick="window.location.href='neos:?world=neos-session:///${e.sessionId}'">Join</button>`;
+}
+
 function GetInbox(e) {
 
     return fetch(HOST + "/api/users/" + localStorage.getItem("userId") + "/messages?maxItems=100&user=" + e, {
@@ -224,7 +220,7 @@ function GetInbox(e) {
                 Authorization: "neos " + localStorage.getItem("userId") + ":" + localStorage.getItem("token")
             },
             cache: "reload"
-            
+
         })
         .then(response => response.json())
         .then(data => {
@@ -236,13 +232,12 @@ function GetInbox(e) {
                 switch (data[i].messageType) {
                     case "Sound":
                         let content = JSON.parse(data[i].content)
-                        if (data[i].recipientId === localStorage.getItem("userId")){
+                        if (data[i].recipientId === localStorage.getItem("userId")) {
                             jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span class="msg_time">' + data[i].senderId + '</span></div></div>');
-                            break   
-                        }
-                        else
-                        jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span class="msg_time">You</span></div></div>');
-                        break   
+                            break
+                        } else
+                            jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span class="msg_time">You</span></div></div>');
+                        break
                     case "SessionInvite":
                         break
                     case "Object":
@@ -250,21 +245,19 @@ function GetInbox(e) {
                     case "CreditTransfer":
                         NCR = JSON.parse(data[i].content)
                         console.log(NCR)
-                        if (data[i].recipientId === localStorage.getItem("userId")){
-                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">Recived ' + NCR.amount + NCR.token +'<span class="msg_time">' + data[i].senderId + '</span></div></div>');
-                            break   
-                        }
-                        else
-                        jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">Sent ' + NCR.amount + NCR.token +'<span class="msg_time">You</span></div></div>');
+                        if (data[i].recipientId === localStorage.getItem("userId")) {
+                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">Recived ' + NCR.amount + NCR.token + '<span class="msg_time">' + data[i].senderId + '</span></div></div>');
+                            break
+                        } else
+                            jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">Sent ' + NCR.amount + NCR.token + '<span class="msg_time">You</span></div></div>');
                         break
                     default:
-                        if (data[i].recipientId == localStorage.getItem("userId")){
-                            
+                        if (data[i].recipientId == localStorage.getItem("userId")) {
+
                             jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + data[i].content + '<span class="msg_time">' + data[i].senderId + '</span></div></div>');
                             break
-                        }
-                        else
-                        jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">' + data[i].content + '<span class="msg_time">You</span></div></div>');
+                        } else
+                            jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">' + data[i].content + '<span class="msg_time">You</span></div></div>');
                         break;
                 }
             }
@@ -273,7 +266,7 @@ function GetInbox(e) {
         })
 }
 new Titlebar({
-	backgroundColor: Color.fromHex('#ECECEC')
+    backgroundColor: Color.fromHex('#ECECEC')
 });
 
 function GetUser(e) {
@@ -288,12 +281,10 @@ function GetUser(e) {
             document.getElementById("inbox").innerHTML = "";
             $.notify("Getting Messages", "success");
             jQuery(userinfo).append(
-                '<div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data.profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon"></span></div><div class="user_info"><span>'+ data.username +'</span><p>1767 Messages</p></div><div class="video_cam"><span><i class="fas fa-video"></i></span><span><i class="fas fa-phone"></i></span></div></div>');
-                onlineStatus = "Offline"
-                //console.log(data[i].userStatus.onlineStatu
-                GetInbox(e)
+                '<div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data.profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon"></span></div><div class="user_info"><span>' + data.username + '</span><p>1767 Messages</p></div><div class="video_cam"><span><i class="fas fa-video"></i></span><span><i class="fas fa-phone"></i></span></div></div>');
+            onlineStatus = "Offline"
+            //console.log(data[i].userStatus.onlineStatu
+            GetInbox(e)
 
-            }
-        )
+        })
 }
-
