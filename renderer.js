@@ -140,6 +140,7 @@ function GetFriends() {
             cache: "no-cache"
         }).then(response => response.json())
         .then(data => {
+            myVar();
             console.log(data.length)
             console.log(data);
             notyf.success('Updated Contacts!');
