@@ -1,55 +1,59 @@
-const {app, BrowserWindow, electron, ipcMain, shell} = require('electron')
-const ipc = ipcMain
 // Modules to control application life and create native browser window
-
+const { app, BrowserWindow } = require('electron')
 const path = require('path')
 
+// Keep a global reference of the window object, if you don't, the window will
+// be closed automatically when the JavaScript object is garbage collected.
+let mainWindow
+
+function createWindow() {
+  // Create the browser window.
+  mainWindow = new BrowserWindow({
+    width: 1197,
+    height: 600,
+    frame: false,
+    maximizable: false,
+    resizable: false,
+    fullscreenable: false,
+    webPreferences: {
+      preload: path.join(__dirname, 'preload.js'),
+      enableRemoteModule: true,
+      nodeIntegration: true,
+    }
+  })
+
+  // and load the index.html of the app.
+  mainWindow.loadFile('new.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
 
+  // Emitted when the window is closed.
+  mainWindow.on('closed', function () {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+    mainWindow = null
+  })
+}
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
-  var mainWindow = new BrowserWindow({
-    width: 1000,
-    height: 600,
-    titleBarStyle: "hidden", // add this line
-  });
-  
-    // and load the index.html of the app.
-    mainWindow.loadFile('new.html')
-  
-  app.on('activate', function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
-})
+app.on('ready', createWindow)
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Quit when all windows are closed.
 app.on('window-all-closed', function () {
+  // On macOS it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') app.quit()
 })
 
-
-// Attach listener in the main process with the given ID
-// Event handler for asynchronous incoming messages
-ipcMain.on('asynchronous-message', (event, arg) => {
-  console.log(arg)
-
-  // Event emitter for sending asynchronous messages
-  event.sender.send('asynchronous-reply', 'async pong')
+app.on('activate', function () {
+  // On macOS it's common to re-create a window in the app when the
+  // dock icon is clicked and there are no other windows open.
+  if (mainWindow === null) createWindow()
 })
 
-// Event handler for synchronous incoming messages
-ipcMain.on('synchronous-message', (event, arg) => {
-  console.log(arg) 
-
-  // Synchronous event emmision
-  event.returnValue = 'sync pong'
-})
-
+// In this file you can include the rest of your app's specific main process
+// code. You can also put them in separate files and require them here.

@@ -1,3 +1,4 @@
+
 HOST = "https://www.neosvr-api.com"
 const USERID = localStorage.getItem("userId")
 TOKEN = localStorage.getItem("token")
@@ -9,6 +10,7 @@ function Setup() {
     if (!localStorage.getItem("token")) {
         document.getElementById("login").style.visibility = "visible"
         document.getElementById("main").style.visibility = "hidden"
+        clearInterval(myVar);
     } else {
         document.getElementById("login").style.visibility = "hidden"
         document.getElementById("main").style.visibility = "visible"
@@ -31,6 +33,26 @@ function Setup() {
 
 }
 
+function GenMachineID(length){
+        var result           = [];
+        var characters       = 'oqep_l3v-u6lom2gftbciw';
+        var charactersLength = characters.length;
+        for ( var i = 0; i < length; i++ ) {
+          result.push(characters.charAt(Math.floor(Math.random() * 
+     charactersLength)));
+       }
+       return result.join('');
+}
+
+function SetMachineID(){
+    if (!localStorage.getItem("MachineID")) {
+        var ID = GenMachineID(22)
+        localStorage.setItem("MachineID", ID)
+    }
+    else
+    console.log("I already have" + localStorage.getItem("MachineID"))
+}
+
 function AuthCheck() {
     return fetch(HOST + "/api/users/" + localStorage.getItem("userId") + "/friends", {
         method: "GET",
@@ -51,9 +73,10 @@ function AuthCheck() {
 }
 
 function Login() {
+    SetMachineID();
     var EMAIL = document.getElementById("Email").value
     var PASSWORD = document.getElementById("Password").value
-    var MachineID = document.getElementById("MachineID").value
+    localStorage.setItem("Email", document.getElementById("Email").value)
     const e = JSON.stringify({
         "ownerId": null,
         "username": null,
@@ -61,7 +84,7 @@ function Login() {
         "password": PASSWORD,
         "recoverCode": null,
         "sessionToken": null,
-        "secretMachineId": MachineID,
+        "secretMachineId": localStorage.getItem("MachineID"),
         "rememberMe": true
     });
     return fetch(HOST + "/api/userSessions", {
@@ -71,16 +94,21 @@ function Login() {
             },
             cache: "no-cache",
             body: e
-        }).then(response => response.json())
+        })
+        
+        .then(response => response.json())
         .then(data => {
-            console.log(data);
-            test.push("Hello " + data.userId)
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.userId);
             document.getElementById("login").style.visibility = "hidden"
             document.getElementById("main").style.visibility = "visible"
+            notyf.success('Logged In!');
             GetFriends()
         })
+        .catch(() => {
+            notyf.error('Wrong Email or Password');
+          });
+        
 }
 
 function Logout() {
@@ -114,7 +142,7 @@ function GetFriends() {
         .then(data => {
             console.log(data.length)
             console.log(data);
-            $.notify("Got Friends", "success");
+            notyf.success('Updated Contacts!');
             $('#friends').empty();
             for (var i = 0; i < data.length; i++) {
                 if (!data[i].userStatus) {
@@ -138,7 +166,7 @@ function GetFriends() {
                         console.log(data[i])
                         if (data[i].profile) jQuery(friends).append(
                             '<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data[i].profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon ' + col + '"></span></div><div class="user_info"><span onclick="GetUser(\'' + data[i].id + '\')"">' + data[i].friendUsername + '</span><p>' + GetWorldStatus(data[i].userStatus.activeSessions[0]) + '</p>' + GetJoinURL(data[i].userStatus.activeSessions[0]) + '</div></div></li>');
-                        else jQuery(friends).append('<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="https://cdn.discordapp.com/attachments/495033101798473749/831273842751438859/vr-6037930_960_720.png" class="rounded-circle user_img"><span class="online_icon ' + col + '"></span></div><div class="user_info"><span>' + data[i].friendUsername + '</span><p>' + GetWorldStatus(data[i].userStatus.activeSessions[0]) + '</p>' + GetJoinURL(data[i].userStatus.activeSessions[0]) + '</div></div></li>');
+                        else jQuery(friends).append('<li><div class="d-flex bd-highlight"><div class="img_cont"><img src="https://cdn.discordapp.com/attachments/495033101798473749/831273842751438859/vr-6037930_960_720.png" class="rounded-circle user_img"><span class="online_icon ' + col + '"></span></div><div class="user_info"><span onclick="GetUser(\'' + data[i].id + '\')">' + data[i].friendUsername + '</span><p>' + GetWorldStatus(data[i].userStatus.activeSessions[0]) + '</p>' + GetJoinURL(data[i].userStatus.activeSessions[0]) + '</div></div></li>');
                     }
                 }
                 onlineStatus = "Offline"
@@ -279,12 +307,15 @@ function GetUser(e) {
             console.log(data);
             document.getElementById("userinfo").innerHTML = "";
             document.getElementById("inbox").innerHTML = "";
-            $.notify("Getting Messages", "success");
+            notyf.success('Got Inbox!');
             jQuery(userinfo).append(
-                '<div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data.profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon"></span></div><div class="user_info"><span>' + data.username + '</span><p>1767 Messages</p></div><div class="video_cam"><span><i class="fas fa-video"></i></span><span><i class="fas fa-phone"></i></span></div></div>');
+                '<div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data.profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon"></span></div><div class="user_info"><span>' + data.username + '</span><p></p></div></i></span><span></i></span></div></div>');
             onlineStatus = "Offline"
             //console.log(data[i].userStatus.onlineStatu
             GetInbox(e)
 
         })
+        .catch(() => {
+            notyf.error('Error Getting Inbox!, Try Later');
+          });
 }
