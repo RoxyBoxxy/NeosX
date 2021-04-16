@@ -8,6 +8,7 @@
     "min_height": 600,
     "icon": "assets/icon.png"
   },
+  "manifestUrl": "https://raw.githubusercontent.com/RoxyBoxxy/NeosX/main/src/package.json",
   "maintainers": [
     {
       "name": "Roxanne",
