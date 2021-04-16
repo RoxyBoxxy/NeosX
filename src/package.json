@@ -30,6 +30,7 @@
   ],
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.5",
-    "font-awesome": "^4.7.0"
+    "font-awesome": "^4.7.0",
+    "node-webkit-updater": "^0.3.3"
   }
 }

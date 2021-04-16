@@ -16,7 +16,8 @@
   },
   "scripts": {
     "dev": "nw src/",
-    "prod": "nwbuild --platforms win32,win64,osx64,linux32,linux64 --buildDir dist/ src/"
+    "prod": "nwbuild --platforms win32,win64,osx64,linux32,linux64 --buildDir dist/ src/",
+    "build": "nwb nwbuild -v 0.52.2 -p win64 ./src"
   },
   "devDependencies": {
     "nw": "^0.52.2-sdk",
