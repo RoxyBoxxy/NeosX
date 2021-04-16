@@ -1,7 +1,7 @@
 {
-  "name": "nw.js-examples",
-  "version": "1.0.0",
-  "description": "nw.js features demonstrated in a simple project",
+  "name": "NeosX",
+  "version": "0.0.5",
+  "description": "A app to access friends and more on NeosVR",
   "main": "views/new.html",
   "window": {
     "min_width": 1197,
@@ -10,11 +10,11 @@
   },
   "maintainers": [
     {
-      "name": "Julian Motz",
-      "web": "https://github.com/julmot"
+      "name": "Roxanne",
+      "web": "https://github.com/roxyboxxy"
     }
   ],
-  "bugs": "https://github.com/julmot/nw.js-examples/issues",
+  "bugs": "https://github.com/RoxyBoxxy/NeosX/issues",
   "licenses": [
     {
       "type": "MIT",
@@ -24,7 +24,7 @@
   "repositories": [
     {
       "type": "git",
-      "url": "https://github.com/julmot/nw.js-examples.git",
+      "url": "https://github.com/RoxyBoxxy/NeosX.git",
       "path": "src/"
     }
   ],
