@@ -4,6 +4,17 @@
 
 A simple app i am making to see who is on and where in neos without loading up the game
 
+## Security
+
+This tool stores you token and userid into localstorage this means we dont need to save your email and password.
+
+The only time your password and email are sent is to collect your token from the Neos API using https, meaning its encripted from you to Neos.
+
+No 3rd party API modules are used nor any servers.
+
+If you have a security consern feel free to post in the Issues tab
+
+
 ## To Use
 
 To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
