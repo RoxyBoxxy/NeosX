@@ -20,6 +20,12 @@
   },
   "devDependencies": {
     "nw": "^0.52.2-sdk",
-    "nw-builder": "^3.1.2"
+    "nw-builder": "^3.1.2",
+    "del": "^2.2.1",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-load-plugins": "^1.2.4",
+    "nwjs-builder": "latest",
+    "yargs": "^4.7.1"
   }
 }

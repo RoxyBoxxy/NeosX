@@ -1,7 +1,7 @@
 # Eclipse
 .settings/
 .project
-.buildpath
+NeosX-win-x64/
 
 # Webstorm
 .idea/
