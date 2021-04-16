@@ -1,0 +1,112 @@
+<script src="../js/updater.js"></script>
+<link href="../css/dist/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="../js/dist/bootstrap.min.js"></script>
+<script src="../js/dist/jquery.min.js"></script>
+<script src="../js/menu.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>NeosX - V 0.0.7</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css"
+    href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.js">
+  </script>
+  <link rel="stylesheet" href="../css/dist/all.css">
+  <link rel="stylesheet" href="../css/dist/bootstrap.min4.1.3.css">
+  <script type="text/javascript" src="renderer.js"></script>
+  <script type="text/javascript" src="https://rawgit.com/notifyjs/notifyjs/master/dist/notify.js"></script>
+  <link rel="stylesheet" type="text/css" href="../css/page.css">
+  <link rel="stylesheet" type="text/css" href="../css/dist/menu.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+
+
+</head>
+<!--Coded With Love By Mutiullah Samim-->
+
+<body onload="Setup()">
+  <!--Login Page-->
+  <div id="login" class="wrapper fadeInDown" style="position: fixed; z-index: 100;">
+    <div id="formContent">
+      <!-- Tabs Titles -->
+
+      <!-- Icon -->
+      <div class="fadeIn first">
+        <img src="http://danielzawadzki.com/codepen/01/icon.svg" id="icon" alt="NeosX Logo" />
+      </div>
+
+      <!-- Login Form -->
+      <form>
+        <input type="text" id="Email" class="fadeIn second" name="login" placeholder="Email">
+        <input type="password" id="Password" class="fadeIn third" name="login" placeholder="Password">
+        <input type="button" onclick="Login()" class="fadeIn fourth" value="Log In">
+      </form>
+
+      <!-- Remind Passowrd -->
+
+    </div>
+  </div>
+  <!--Main Page-->
+  <div id="main" style="visibility: hidden;" class="container-fluid h-100">
+    <div class="row justify-content-center h-100">
+      <div class="col-md-4 col-xl-3 chat">
+        <div class="card mb-sm-3 mb-md-0 contacts_card">
+          <div class="card-header">
+            <div class="input-group">
+              <button id="logoutbtn" type="button" class="btn btn-outline-danger" onclick="Logout()">Logout</button>
+            </div>
+          </div>
+          <div class="card-body contacts_body">
+            <ui class="contacts" id="friends">
+
+            </ui>
+          </div>
+          <div class="card-footer"></div>
+        </div>
+      </div>
+      <div class="col-md-8 col-xl-6 chat">
+        <div class="card">
+          <div class="card-header msg_head">
+            <div id="userinfo" class="d-flex bd-highlight">
+              <div class="img_cont">
+                <img src="" class="rounded-circle user_img">
+                <span class="online_icon"></span>
+              </div>
+              <div class="user_info">
+                <span></span>
+                <p></p>
+              </div>
+            </div>
+            <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+
+          </div>
+          <div id="inbox" class="card-body msg_card_body">
+
+
+          </div>
+          <div class="card-footer">
+            <div class="input-group">
+              <div class="input-group-append">
+                <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
+              </div>
+              <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+              <div class="input-group-append">
+                <span class="input-group-text send_btn"><i class="fas fa-location-arrow"
+                    onclick="alert('This function is not yet implamented yet')"></i></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+  <script>
+    var notyf = new Notyf();
+  </script>
+</body>
+</html>
