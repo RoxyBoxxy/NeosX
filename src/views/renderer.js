@@ -24,6 +24,8 @@ function Setup() {
 
             .then(data => {
                 console.log(data);
+                account.append(new nw.MenuItem({ label: data.username + ' Logout', click: function(){Logout();} }));
+                account.append(new nw.MenuItem({ label: 'NCR ' + parseFloat(data.credits.NCR).toFixed(2), click: function(){prompt("Your NCR deposit Address", data.NCRdepositAddress);} }));
                 document.getElementById('logoutbtn').value = data.username + " Logout"
                 AuthCheck()
             })
@@ -69,6 +71,7 @@ function AuthCheck() {
             localStorage.clear();
             clearInterval(myVar);
         } else GetFriends()
+        setInterval(myTimer, 90000);
     });
 }
 
@@ -100,6 +103,8 @@ function Login() {
         .then(data => {
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.userId);
+            //store(data)
+
             document.getElementById("login").style.visibility = "hidden"
             document.getElementById("main").style.visibility = "visible"
             notyf.success('Logged In!');
@@ -132,6 +137,7 @@ function Logout() {
 }
 
 function GetFriends() {
+    
     return fetch(HOST + "/api/users/" + localStorage.getItem("userId") + "/friends", {
             method: "GET",
             headers: {
@@ -140,9 +146,9 @@ function GetFriends() {
             cache: "no-cache"
         }).then(response => response.json())
         .then(data => {
-            myVar();
             console.log(data.length)
             console.log(data);
+            
             notyf.success('Updated Contacts!');
             $('#friends').empty();
             for (var i = 0; i < data.length; i++) {
@@ -179,7 +185,7 @@ function GetFriends() {
         })
 }
 
-var myVar = setInterval(myTimer, 20000);
+//var myVar = setInterval(myTimer, 20000);
 
 function on() {
     document.getElementById("overlay").style.display = "block";
@@ -262,7 +268,7 @@ function GetInbox(e) {
                     case "Sound":
                         let content = JSON.parse(data[i].content)
                         if (data[i].recipientId === localStorage.getItem("userId")) {
-                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span class="msg_time">' + data[i].senderId + '</span></div></div>');
+                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span id="user" class="msg_time">' + data[i].senderId + '</span></div></div>');
                             break
                         } else
                             jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer"><audio controls><source src="' + GetAsset(content.assetUri) + '" type="audio/ogg"><span class="msg_time">You</span></div></div>');
@@ -275,7 +281,7 @@ function GetInbox(e) {
                         NCR = JSON.parse(data[i].content)
                         console.log(NCR)
                         if (data[i].recipientId === localStorage.getItem("userId")) {
-                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">Recived ' + NCR.amount + NCR.token + '<span class="msg_time">' + data[i].senderId + '</span></div></div>');
+                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">Recived ' + NCR.amount + NCR.token + '<span id="user" class="msg_time">' + data[i].senderId + '</span></div></div>');
                             break
                         } else
                             jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">Sent ' + NCR.amount + NCR.token + '<span class="msg_time">You</span></div></div>');
@@ -283,10 +289,10 @@ function GetInbox(e) {
                     default:
                         if (data[i].recipientId == localStorage.getItem("userId")) {
 
-                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + data[i].content + '<span class="msg_time">' + data[i].senderId + '</span></div></div>');
+                            jQuery(inbox).append('<div class="d-flex justify-content-end mb-4"><div class="msg_cotainer_send">' + data[i].content + '<span id="user" class="msg_time">' + data[i].senderId + '</span></div></div>');
                             break
                         } else
-                            jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">' + data[i].content + '<span class="msg_time">You</span></div></div>');
+                            jQuery(inbox).append('<div class="d-flex justify-content-start mb-4"><div class="msg_cotainer">' + data[i].content + '<span  class="msg_time">You</span></div></div>');
                         break;
                 }
             }
@@ -312,6 +318,7 @@ function GetUser(e) {
             jQuery(userinfo).append(
                 '<div class="d-flex bd-highlight"><div class="img_cont"><img src="' + GetAsset(data.profile.iconUrl) + '" class="rounded-circle user_img"><span class="online_icon"></span></div><div class="user_info"><span>' + data.username + '</span><p></p></div></i></span><span></i></span></div></div>');
             onlineStatus = "Offline"
+            localStorage.setItem('msguser', data.id)
             //console.log(data[i].userStatus.onlineStatu
             GetInbox(e)
 
@@ -319,4 +326,28 @@ function GetUser(e) {
         .catch(() => {
             notyf.error('Error Getting Inbox!, Try Later');
           });
+}
+function prepmsg(){
+   console.log()
+}
+
+function SendMsg(b){
+    const msg = JSON.stringify({
+        "content": b,
+        "id": null,
+        "lastUpdateTime": null,
+        "messageType": "Text",
+        "ownerId": null,
+        "readTime": null,
+        "recipientId": null,
+        "sendTime": null,
+        "senderId": null
+    });
+    return fetch(HOST + "/api/users/" + localStorage.getItem('msguser') + "/messages", {
+        method: "POST",
+        headers: {
+            Authorization: "neos " + localStorage.getItem("userId") + ":" + localStorage.getItem("token")
+        },
+        body: msg
+    })
 }

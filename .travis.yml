@@ -1,8 +1,0 @@
-dist: trusty
-language: node_js
-node_js:
-  - "14"
-install:
-  - npm i
-script:
-  - npm start

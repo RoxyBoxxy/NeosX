@@ -1,28 +1,25 @@
 {
-  "name": "NeosX",
+  "name": "nw.js-examples",
   "version": "1.0.0",
-  "description": "A minimal Electron application",
-  "main": "main.js",
+  "description": "nw.js features demonstrated in a simple project",
+  "license": "MIT",
+  "author": {
+    "name": "Julian Motz",
+    "url": "https://github.com/julmot"
+  },
+  "repository": {
+    "url": "https://github.com/julmot/nw.js-examples.git",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/julmot/nw.js-examples/issues"
+  },
   "scripts": {
-    "start": "electron .",
-    "build": "electron-build"
+    "dev": "nw src/",
+    "prod": "nwbuild --platforms win32,win64,osx64,linux32,linux64 --buildDir dist/ src/"
   },
-  "repository": "https://github.com/electron/electron-quick-start",
-  "keywords": [
-    "Electron",
-    "quick",
-    "start",
-    "tutorial",
-    "demo"
-  ],
-  "author": "GitHub",
-  "license": "CC0-1.0",
   "devDependencies": {
-    "electron": "^12.0.2"
-  },
-  "dependencies": {
-    "custom-electron-titlebar": "^3.2.6",
-    "electron-builder": "^22.10.5",
-    "jquery": "^3.6.0"
+    "nw": "^0.52.2-sdk",
+    "nw-builder": "^3.1.2"
   }
 }

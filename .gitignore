@@ -1,1 +1,20 @@
-node_modules
+# Eclipse
+.settings/
+.project
+.buildpath
+
+# Webstorm
+.idea/
+
+# Dependencies
+node_modules/
+npm-debug.log
+
+# nw.js cache
+cache/
+
+# Build
+dist/
+
+# Personal
+TODO
